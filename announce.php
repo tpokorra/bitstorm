@@ -53,7 +53,7 @@
 		$numWant = __MAX_PPR;
 	}
 
-	$reply = dbGetPeers($torrentPk, $peerPk, $numWant);
+	$reply = dbGetPeers($torrentPk, $peerPk, $_SERVER['REMOTE_ADDR'], $numWant);
 	list($seeders, $leechers) = dbGetCounts($torrentPk);
 	$result = trackPeers($reply, $seeders, $leechers, $noPeerId);
 	mydebug($result);

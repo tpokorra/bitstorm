@@ -95,18 +95,19 @@
 		$update->close();
 	}
 
-	function dbGetPeers($torrentPk, $peerPk, $limit) {
+	function dbGetPeers($torrentPk, $peerPk, $peerIP, $limit) {
 		global $_sql;
 		$select = $_sql->prepare('SELECT bit_peer.ip_address, bit_peer.port, bit_peer.hash FROM bit_peer_torrent '
 			. 'LEFT JOIN bit_peer ON bit_peer.id = bit_peer_torrent.peer_id '
 			. 'WHERE bit_peer_torrent.torrent_id = ? AND bit_peer_torrent.stopped = 0 '
 			. 'AND bit_peer_torrent.last_updated >= DATE_SUB(UTC_TIMESTAMP(), INTERVAL ? SECOND) '
 			. 'AND bit_peer.id != ? '
+			. 'AND bit_peer.ip_address != ? '
 			. 'ORDER BY RAND() '
 			. 'LIMIT ?');
 
 		$interval = __INTERVAL + __TIMEOUT;
-		$select->bind_param('iiii', $torrentPk, $interval, $peerPk, $limit);
+		$select->bind_param('iiisi', $torrentPk, $interval, $peerPk, $peerIP, $limit);
 
 		if(!$select->execute()) {
 			die(trackError('Database failed when getting peers: ' . $select->errno));
