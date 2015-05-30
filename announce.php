@@ -55,4 +55,6 @@
 
 	$reply = dbGetPeers($torrentPk, $peerPk, $numWant);
 	list($seeders, $leechers) = dbGetCounts($torrentPk);
-	die(trackPeers($reply, $seeders, $leechers, $noPeerId));
+	$result = trackPeers($reply, $seeders, $leechers, $noPeerId);
+	mydebug($result);
+	die($result);

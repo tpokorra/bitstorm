@@ -34,7 +34,9 @@
 	}
 
 	function trackError($error) {
-		return 'd14:failure reason' . strlen($error) . ':' . $error . 'e';
+		$message = 'd14:failure reason' . strlen($error) . ':' . $error . 'e';
+		mydebug($message);
+		return $message;
 	}
 
 	function trackPeers($list, $complete, $incomplete, $noPeerId) {
@@ -121,4 +123,12 @@
 		}
 
 		return null;
+	}
+
+	function mydebug($msg) {
+		if(is_writeable(__LOGFILE)) {
+			$fh = fopen(__LOGFILE,'a+');
+			fputs($fh,"[Log] ".date("d.m.Y H:i:s")." $msg\n");
+			fclose($fh);
+		}
 	}

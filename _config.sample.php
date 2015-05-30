@@ -18,6 +18,8 @@ define('__TIMEOUT', 120);
 define('__INTERVAL_MIN', 60);
 // By default, never encode more than this number of peers in a single request
 define('__MAX_PPR', 20);
+// where to store the log file if any. must exist and writeable to be used
+define('__LOGFILE', '../mylog.log');
 
 /*
  * Whitelisting
