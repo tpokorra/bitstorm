@@ -111,6 +111,20 @@
 		if(!$select->execute()) {
 			die(trackError('Database failed when getting peers: ' . $select->errno));
 		}
+
+		if (!method_exists($select, get_result)) {
+			$select->store_result();
+			$result = array();
+			while($assoc_array = fetch_stmt_results($select)) {
+				$row = array();
+				foreach ($assoc_array as $name => $value) {
+					$row[] = $value;
+				}
+				$result[] = $row;
+			}
+			return $result;
+		}
+
 		if(!($result = $select->get_result())) {
 			die(trackError('Database failed when getting peers: ' . $select->errno));
 		}
