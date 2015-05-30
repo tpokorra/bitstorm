@@ -35,6 +35,10 @@
 	$numWant = validateInt('numwant', true);
 	$noPeerId = isset($_GET['no_peer_id']);
 
+	if($numWant <= 0 || $numWant > __MAX_PPR) {
+		$numWant = __MAX_PPR;
+	}
+
 	if(__WHITELIST_ENABLED && !isWhitelisted($infoHash)) {
 		die(trackError('Torrent not allowed on this tracker'));
 	}
@@ -47,10 +51,6 @@
 		dbStoppedPeer($peerTorrentPk);
 		// The RFC says its OK to return an empty string when stopping a torrent however some clients will whine about it so we return an empty dictionary
 		die(trackPeers(array(), 0, 0, $noPeerId));
-	}
-
-	if($numWant <= 0 || $numWant > __MAX_PPR) {
-		$numWant = __MAX_PPR;
 	}
 
 	$reply = dbGetPeers($torrentPk, $peerPk, $_SERVER['REMOTE_ADDR'], $numWant);
